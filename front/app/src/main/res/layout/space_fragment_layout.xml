@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- space_fragment_layout.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageButton android:id="@+id/space_add_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_add"
+            android:scaleType="centerCrop">
+        </ImageButton>
+    </LinearLayout>
+    <ListView
+        android:id="@+id/space_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </ListView>
+</LinearLayout>

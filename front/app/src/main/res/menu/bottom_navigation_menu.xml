@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- bottom_nav_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_discovery"
+        android:icon="@drawable/ic_discovery"
+        android:title="Discovery" />
+    <item
+        android:id="@+id/menu_item_space"
+        android:icon="@drawable/ic_space"
+        android:title="Space" />
+    <item
+        android:id="@+id/menu_item_friend"
+        android:icon="@drawable/ic_group"
+        android:title="Friend" />
+    <item
+        android:id="@+id/menu_item_home"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+    <!-- 添加其他菜单项 -->
+</menu>
+
