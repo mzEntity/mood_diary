@@ -4,11 +4,13 @@ import com.example.demo.exception.NewEntityException;
 import com.example.demo.model.MoodScore;
 import com.example.demo.repository.MoodRepository;
 import com.example.demo.repository.MoodScoreRepository;
+import com.example.demo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Component
@@ -39,4 +41,11 @@ public class MoodScoreService {
         }
     }
 
+    public List<MoodScore> getMonthlyMoodScore(int userId, int year, int month){
+        Date startDate = MyUtils.getStartDateOfMonth(year, month);
+        Date endDate = MyUtils.getStartDateOfNextMonth(year, month);
+        return this.moodScoreRepository.getMoodScoresByUserIdAndDateBetween(
+                userId, startDate, endDate
+        );
+    }
 }

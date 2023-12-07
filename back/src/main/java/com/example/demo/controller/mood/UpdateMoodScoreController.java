@@ -28,7 +28,7 @@ public class UpdateMoodScoreController {
 
 
     @PostMapping("/updateMoodScore")
-    public Result commitDiary(@RequestBody UpdateMoodScoreRequestPackage requestPackage){
+    private Result commitDiary(@RequestBody UpdateMoodScoreRequestPackage requestPackage){
         int userId = requestPackage.getUserId();
         int score = requestPackage.getScore();
 
@@ -44,18 +44,17 @@ public class UpdateMoodScoreController {
             return ResultFactory.buildFailResult(null, e.getMessage());
         }
     }
-}
 
+    private static class UpdateMoodScoreRequestPackage{
+        private int userId;
+        private int score;
 
-class UpdateMoodScoreRequestPackage{
-    private int userId;
-    private int score;
+        public int getUserId() {
+            return userId;
+        }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public int getScore() {
-        return score;
+        public int getScore() {
+            return score;
+        }
     }
 }
