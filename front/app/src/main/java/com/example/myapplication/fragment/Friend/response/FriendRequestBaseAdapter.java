@@ -48,6 +48,7 @@ public class FriendRequestBaseAdapter extends BaseAdapter {
 
             viewHolder.avatarView = convertView.findViewById(R.id.friend_request_list_item_avatar);
             viewHolder.nameView =  convertView.findViewById(R.id.friend_request_list_item_name);
+            viewHolder.dateView = convertView.findViewById(R.id.friend_request_list_item_date);
             viewHolder.contentView = convertView.findViewById(R.id.friend_request_list_item_content);
 
             convertView.setTag(viewHolder);
@@ -56,7 +57,8 @@ public class FriendRequestBaseAdapter extends BaseAdapter {
         }
 
         FriendRequestItem bean = itemList.get(position);
-        viewHolder.nameView.setText(bean.getFriendName());
+        viewHolder.nameView.setText(bean.getSenderName());
+        viewHolder.dateView.setText(bean.getUpdateTime());
         viewHolder.contentView.setText(bean.getValidation());
 
         return convertView;
@@ -67,5 +69,7 @@ public class FriendRequestBaseAdapter extends BaseAdapter {
         public ImageView avatarView;
         public TextView nameView;
         public TextView contentView;
+
+        public TextView dateView;
     }
 }

@@ -44,24 +44,25 @@ public class FriendRequestFragment extends Fragment {
         String url = "/getAllRequestsReceived";
         HashMap<String, String> params = new HashMap<>();
         params.put("userId", "" + userId);
-        params.put("stateId", Config.waitForCheck);
         HTTPHelper.get(url, params, new HTTPCallBack() {
             @Override
             public void getSuccess(JSONObject returnObject, String msg) {
                 HTTPCallBack.super.getSuccess(returnObject, msg);
                 getActivity().runOnUiThread(()->{
                     try {
-                        JSONArray array = returnObject.getJSONArray("object");
+                        JSONObject responseObject = returnObject.getJSONObject("object");
+                        JSONArray array = responseObject.getJSONArray("allRequests");
                         int length = array.length();
                         List<FriendRequestItem> requestItemList = new ArrayList<>();
                         for(int i = 0; i < length; i++){
                             JSONObject request = array.getJSONObject(i);
-                            int id = request.getInt("id");
-                            int userId = request.getInt("userId");
-                            int friendId = request.getInt("userId");
-                            String friendName = "" + friendId;
+                            int id = request.getInt("requestId");
+                            int senderId = request.getInt("senderId");
+                            int receiverId = request.getInt("receiverId");
+                            String senderName = request.getString("senderName");
                             String validation = request.getString("validation");
-                            requestItemList.add(new FriendRequestItem(id, userId, friendId, friendName, validation));
+                            String updateTime = request.getString("updateTime");
+                            requestItemList.add(new FriendRequestItem(id, senderId, receiverId, senderName, validation, updateTime));
                         }
 
                         ListView lv = view.findViewById(R.id.friend_request_list);
