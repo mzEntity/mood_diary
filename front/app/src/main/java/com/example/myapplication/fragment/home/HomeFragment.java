@@ -86,4 +86,6 @@ public class HomeFragment extends Fragment {
 
         lineChart.invalidate();
     }
+
+
 }
