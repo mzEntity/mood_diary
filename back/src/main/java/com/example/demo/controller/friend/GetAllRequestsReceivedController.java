@@ -7,6 +7,7 @@ import com.example.demo.model.Friend;
 import com.example.demo.model.User;
 import com.example.demo.result.Result;
 import com.example.demo.result.ResultFactory;
+import com.example.demo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,7 +46,8 @@ public class GetAllRequestsReceivedController {
                     sender.getUsername(),
                     friend.getFriendId(),
                     friend.getStateId(),
-                    friend.getValidation()
+                    friend.getValidation(),
+                    MyUtils.timestampToString(friend.getUpdatedAt())
             );
             allRequestDTO.add(requestDTO);
         }
@@ -65,13 +67,16 @@ public class GetAllRequestsReceivedController {
         private int stateId;
         private String validation;
 
-        public RequestDTO(int requestId, int senderId, String senderName, int receiverId, int stateId, String validation) {
+        private String updateTime;
+
+        public RequestDTO(int requestId, int senderId, String senderName, int receiverId, int stateId, String validation, String updateTime) {
             this.requestId = requestId;
             this.senderId = senderId;
             this.senderName = senderName;
             this.receiverId = receiverId;
             this.stateId = stateId;
             this.validation = validation;
+            this.updateTime = updateTime;
         }
 
         public int getRequestId() {
@@ -96,6 +101,10 @@ public class GetAllRequestsReceivedController {
 
         public String getValidation() {
             return validation;
+        }
+
+        public String getUpdateTime() {
+            return updateTime;
         }
     }
 

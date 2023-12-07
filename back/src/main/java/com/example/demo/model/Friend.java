@@ -1,8 +1,8 @@
 package com.example.demo.model;
 
-import com.example.demo.transfer.FriendDTO;
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
 
 
 @Entity
@@ -24,16 +24,17 @@ public class Friend {
     @Column(name = "validation")
     private String validation;
 
-    public Friend() {
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 
-    }
+    public Friend() {}
 
-    public Friend(FriendDTO friendDTO){
-        this.id = friendDTO.getId();
-        this.userId = friendDTO.getUser_id();
-        this.friendId = friendDTO.getFriend_id();
-        this.stateId = friendDTO.getState_id();
-        this.validation = friendDTO.getValidation();
+    public Friend(Integer userId, Integer friendId, Integer stateId, String validation, Timestamp updatedAt) {
+        this.userId = userId;
+        this.friendId = friendId;
+        this.stateId = stateId;
+        this.validation = validation;
+        this.updatedAt = updatedAt;
     }
 
     public Integer getId() {
@@ -80,5 +81,13 @@ public class Friend {
 
     public void setValidation(String validation) {
         this.validation = validation;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

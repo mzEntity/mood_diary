@@ -1,19 +1,17 @@
 package com.example.demo.Service;
 
 
-import com.example.demo.DTO.FriendListItemDTO;
 import com.example.demo.exception.NewEntityException;
 import com.example.demo.exception.NoEntityInDatabaseException;
 import com.example.demo.model.Friend;
 import com.example.demo.model.RequestState;
 import com.example.demo.repository.FriendRepository;
 import com.example.demo.repository.RequestStateRepository;
-import com.example.demo.transfer.FriendDTO;
+import com.example.demo.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Component
@@ -50,8 +48,6 @@ public class FriendService {
         return result;
     }
 
-
-
     public boolean isRequestStateExist(int id){
         return requestStateRepository.findById(id) != null;
     }
@@ -60,27 +56,17 @@ public class FriendService {
         return friendRepository.findById(id) != null;
     }
 
-    private List<RequestState> getAllRequestState(){
-        return requestStateRepository.findAll();
-    }
-
     private RequestState getRequestStateByName(String name){
         return requestStateRepository.findByName(name);
     }
 
-    private boolean isRecordExist(int user_id, int friend_id, int state_id){
-        return friendRepository.findByUserIdAndFriendIdAndStateId(user_id, friend_id, state_id) != null;
-    }
-
-
-    private Friend getRecord(int user_id, int friend_id, int state_id){
-        return friendRepository.findByUserIdAndFriendIdAndStateId(user_id, friend_id, state_id);
-    }
 
 
     public void requestFriend(int user_id, int friend_id, String validation_msg) throws NewEntityException{
-        FriendDTO friendDTO = new FriendDTO(user_id, friend_id, getStateIdByName("待审核"), validation_msg);
-        Friend friend = new Friend(friendDTO);
+        int stateId = this.getStateIdByName("待审核");
+        Friend friend = new Friend(
+            user_id, friend_id, stateId, validation_msg, MyUtils.getCurrentTimestamp()
+        );
         try {
             friendRepository.save(friend);
         } catch (Exception e) {

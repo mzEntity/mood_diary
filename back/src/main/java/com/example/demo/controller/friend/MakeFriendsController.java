@@ -1,25 +1,22 @@
 package com.example.demo.controller.friend;
 
 
-import com.example.demo.DTO.FriendListItemDTO;
+import com.example.demo.transfer.FriendListItemDTO;
 import com.example.demo.Service.FriendService;
 import com.example.demo.Service.UserService;
 
 import com.example.demo.exception.EntityDuplicateException;
 import com.example.demo.exception.NewEntityException;
 import com.example.demo.exception.NoEntityInDatabaseException;
-import com.example.demo.model.Diary;
 import com.example.demo.model.Friend;
 import com.example.demo.model.User;
 import com.example.demo.result.Result;
 import com.example.demo.result.ResultFactory;
 
-import com.example.demo.transfer.FriendDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController

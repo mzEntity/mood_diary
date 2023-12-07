@@ -52,6 +52,7 @@ CREATE TABLE `friend`
     `friend_id`     int(11) NOT NULL,
     `state_id`      int(11) NOT NULL,
     `validation`    TEXT NOT NULL COMMENT '验证消息',
+    `updated_at` timestamp COMMENT '更新日期',
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES user(`id`),
     FOREIGN KEY (`friend_id`) REFERENCES user(`id`),
