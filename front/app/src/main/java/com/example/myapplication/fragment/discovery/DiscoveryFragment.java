@@ -11,12 +11,28 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.common.HTTPCallBack;
+import com.example.myapplication.common.HTTPHelper;
 import com.example.myapplication.common.Utils;
+import com.example.myapplication.main.SessionManager;
+import com.example.myapplication.main.UserInfoItem;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DiscoveryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.discovery_fragment_layout, container, false);
+
+        SessionManager sessionManager = new SessionManager(requireContext());
+        if(!sessionManager.isLoggedIn()){
+            sessionManager.redirectToLogin(getParentFragmentManager());
+        }
+        UserInfoItem user = sessionManager.getUserDetails();
+
+        int userId = user.getId();
+
         SeekBar seekBar = view.findViewById(R.id.mood_seekBar);
         TextView seekBarValTextView = view.findViewById(R.id.mood_rate_val_text);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -38,10 +54,38 @@ public class DiscoveryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int progress = seekBar.getProgress();
-                Utils.toastMsg(getContext(), "You get " + progress);
+                rateMood(userId, progress);
             }
         });
 
         return view;
+    }
+
+    public void rateMood(int userId, int score){
+        JSONObject requestObject = new JSONObject();
+        try{
+            requestObject.put("userId", userId);
+            requestObject.put("score", score);
+        } catch (JSONException e){
+            Utils.toastMsg(requireContext(), "Error in sending request");
+        }
+        String url = "/updateMoodScore";
+        HTTPHelper.post(url, requestObject, new HTTPCallBack() {
+            @Override
+            public void getSuccess(JSONObject returnObject, String msg) {
+                HTTPCallBack.super.getSuccess(returnObject, msg);
+                getActivity().runOnUiThread(()->{
+                    Utils.toastMsg(requireContext(), "rate " + score);
+                });
+            }
+
+            @Override
+            public void getNotSuccess(JSONObject returnObject, String msg) {
+                HTTPCallBack.super.getNotSuccess(returnObject, msg);
+                getActivity().runOnUiThread(()->{
+                    Utils.toastMsg(requireContext(), msg);
+                });
+            }
+        });
     }
 }
