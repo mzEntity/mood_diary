@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `mood_score`;
 DROP TABLE IF EXISTS `diary`;
 DROP TABLE IF EXISTS `friend`;
 DROP TABLE IF EXISTS `user`;
@@ -60,3 +61,13 @@ CREATE TABLE `friend`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='好友表';
 
+CREATE TABLE `mood_score`
+(
+    `id`          int(11) NOT NULL AUTO_INCREMENT,
+    `user_id`     int(11) NOT NULL,
+    `mood_score`  int(3) NOT NULL,
+    `date` DATE COMMENT '提交日期',
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES user(`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='心情打分表';
