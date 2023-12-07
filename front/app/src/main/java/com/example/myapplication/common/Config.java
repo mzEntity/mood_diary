@@ -9,6 +9,8 @@ public class Config {
 
     public static final HashMap<Integer, String> requestMap = new HashMap<>();
 
+    public static final HashMap<String, Integer> requestMapIS = new HashMap<>();
+
     public static final String waitForCheck = "1";
 
     static {
@@ -23,5 +25,8 @@ public class Config {
         requestMap.put(1, "待审核");
         requestMap.put(2, "已通过");
         requestMap.put(3, "已拒绝");
+        requestMapIS.put("待审核", 1);
+        requestMapIS.put("已通过", 2);
+        requestMapIS.put("已拒绝", 3);
     }
 }

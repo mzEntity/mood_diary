@@ -66,7 +66,7 @@ public class FriendRequestFragment extends Fragment {
                         }
 
                         ListView lv = view.findViewById(R.id.friend_request_list);
-                        FriendRequestBaseAdapter adapter = new FriendRequestBaseAdapter(view.getContext(), requestItemList);
+                        FriendRequestBaseAdapter adapter = new FriendRequestBaseAdapter(requireActivity(), view.getContext(), requestItemList);
 
                         lv.setAdapter(adapter);
                     } catch (JSONException e) {
