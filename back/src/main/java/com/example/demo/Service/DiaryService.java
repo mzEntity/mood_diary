@@ -60,4 +60,8 @@ public class DiaryService {
         }
         return result;
     }
+
+    public Diary getDiaryByDiaryId(int id){
+        return diaryRepository.findDiaryById(id);
+    }
 }
