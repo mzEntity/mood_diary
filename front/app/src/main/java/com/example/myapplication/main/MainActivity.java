@@ -3,21 +3,16 @@ package com.example.myapplication.main;
 // MainActivity.java
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.R;
-import com.example.myapplication.fragment.DiscoveryFragment;
-import com.example.myapplication.fragment.HomeFragment;
+import com.example.myapplication.fragment.discovery.DiscoveryFragment;
+import com.example.myapplication.fragment.home.HomeFragment;
 import com.example.myapplication.fragment.Friend.FriendFragment;
 import com.example.myapplication.fragment.space.SpaceFragment;
-import com.example.myapplication.fragment.space.issue.IssueDialogFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {

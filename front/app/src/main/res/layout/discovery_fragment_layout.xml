@@ -5,11 +5,26 @@
     android:layout_height="match_parent"
     android:gravity="top|center"
     android:orientation="vertical">
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Discovery Fragment"
+        android:text="给你的心情打个分吧"
         android:textSize="24sp" />
+
+    <SeekBar
+        android:id="@+id/mood_seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="10" />
+    <TextView android:id="@+id/mood_rate_val_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="rate val"/>
+    <Button
+        android:id="@+id/mood_rate_submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="send" />
     <!-- 添加其他视图或控件 -->
 </LinearLayout>
