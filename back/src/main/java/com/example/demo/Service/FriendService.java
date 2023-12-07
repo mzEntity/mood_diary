@@ -31,7 +31,8 @@ public class FriendService {
         return this.friendRepository.findAllByUserIdAndStateId(userId, stateId);
     }
 
-    public List<Friend> getAllRequestsReceived(int friendId, int stateId){
+    public List<Friend> getAllRequestsReceived(int friendId){
+        int stateId = this.getStateIdByName("待审核");
         return this.friendRepository.findAllByFriendIdAndStateId(friendId, stateId);
     }
 

@@ -52,22 +52,6 @@ public class MakeFriendsController {
         return ResultFactory.buildSuccessResult(allRequests);
     }
 
-    @GetMapping("/getAllRequestsReceived")
-    public Result getAllRequestsReceived(
-            @RequestParam(value = "userId") Integer userId,
-            @RequestParam(value = "stateId") Integer stateId
-    ){
-        boolean user_exist = this.userService.isUserExist( userId);
-        if(!user_exist){
-            return ResultFactory.buildFailResult(null, "User doesn't exist.");
-        }
-        boolean state_exist = this.friendService.isRequestStateExist(stateId);
-        if(!state_exist){
-            return ResultFactory.buildFailResult(null, "State doesn't exist.");
-        }
-        List<Friend> allRequests = this.friendService.getAllRequestsReceived(userId, stateId);
-        return ResultFactory.buildSuccessResult(allRequests);
-    }
 
     @GetMapping("/getAllFriends")
     public Result getAllFriends(
