@@ -56,7 +56,6 @@ public class FriendRequestBaseAdapter extends BaseAdapter {
         }
 
         FriendRequestItem bean = itemList.get(position);
-
         viewHolder.nameView.setText(bean.getFriendName());
         viewHolder.contentView.setText(bean.getValidation());
 

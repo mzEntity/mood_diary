@@ -75,10 +75,11 @@ public class SpaceFragment extends Fragment {
                             String title = diary.getString("title");
                             String content = diary.getString("content");
                             String updatedAt = diary.getString("updatedAt");
-                            spaceItemList.add(new SpaceItem(authorName, updatedAt, title, content));
+                            spaceItemList.add(new SpaceItem(id, authorName, updatedAt, title, content));
                         }
                         ListView lv = view.findViewById(R.id.space_list);
-                        SpaceBaseAdapter adapter = new SpaceBaseAdapter(view.getContext(), spaceItemList);
+                        SpaceBaseAdapter adapter = new SpaceBaseAdapter(requireActivity().getSupportFragmentManager(),
+                                view.getContext(), spaceItemList);
                         lv.setAdapter(adapter);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);

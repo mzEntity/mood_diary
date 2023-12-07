@@ -27,7 +27,7 @@
         android:layout_toRightOf="@id/space_list_item_avatar"
         android:layout_below="@id/space_list_item_author"
         android:text="date here"/>
-    <TextView android:id="@+id/space_list_item_content"
+    <TextView android:id="@+id/space_list_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"

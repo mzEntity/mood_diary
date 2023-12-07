@@ -1,6 +1,7 @@
 package com.example.myapplication.fragment.space;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.myapplication.R;
+import com.example.myapplication.fragment.ownSpace.DiaryDetailFragment;
+import com.example.myapplication.fragment.ownSpace.UserSpaceFragment;
 
 import java.util.List;
 
@@ -17,7 +23,9 @@ public class SpaceBaseAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public SpaceBaseAdapter(Context context, List<SpaceItem> itemList) {
+    private FragmentManager fragmentManager;
+    public SpaceBaseAdapter(FragmentManager fragmentManager, Context context, List<SpaceItem> itemList) {
+        this.fragmentManager = fragmentManager;
         this.itemList = itemList;
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
@@ -48,7 +56,7 @@ public class SpaceBaseAdapter extends BaseAdapter {
             viewHolder.avatarView = convertView.findViewById(R.id.space_list_item_avatar);
             viewHolder.authorView = convertView.findViewById(R.id.space_list_item_author);
             viewHolder.dateView = convertView.findViewById(R.id.space_list_item_date);
-            viewHolder.contentView = convertView.findViewById(R.id.space_list_item_content);
+            viewHolder.titleView = convertView.findViewById(R.id.space_list_item_title);
 
             convertView.setTag(viewHolder);
         } else {
@@ -59,7 +67,20 @@ public class SpaceBaseAdapter extends BaseAdapter {
 
         viewHolder.authorView.setText(bean.getAuthor());
         viewHolder.dateView.setText(bean.getDate());
-        viewHolder.contentView.setText(bean.getContent());
+        viewHolder.titleView.setText(bean.getTitle());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DiaryDetailFragment diaryDetailFragment = new DiaryDetailFragment();
+                Bundle args = new Bundle();
+                args.putInt("diaryId", bean.getDiaryId());
+                diaryDetailFragment.setArguments(args);
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.fragment_container, diaryDetailFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
 
         return convertView;
     }
@@ -70,6 +91,6 @@ public class SpaceBaseAdapter extends BaseAdapter {
         public ImageView avatarView;
         public TextView authorView;
         public TextView dateView;
-        public TextView contentView;
+        public TextView titleView;
     }
 }
