@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.common.HTTPCallBack;
@@ -49,7 +50,8 @@ public class HomeFragment extends Fragment {
         int year = Utils.getCurrentYear();
         int month = Utils.getCurrentMonth();
 
-//        renderPieChart(view);
+        TextView textView = view.findViewById(R.id.welcome_home_text);
+        textView.setText("Welcome " + user.getUsername());
         getMonthlyMoodScore(user.getId(), year, month, view);
         return view;
     }

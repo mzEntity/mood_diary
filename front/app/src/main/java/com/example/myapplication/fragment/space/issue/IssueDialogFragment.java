@@ -63,7 +63,7 @@ public class IssueDialogFragment extends DialogFragment {
         Spinner spinner = view.findViewById(R.id.issue_mood_spinner);
         List<String> list = new ArrayList<>();
         for(int moodId: Config.moodMap.keySet()){
-            String moodName = Config.moodMap.get(moodId);
+            String moodName = Config.moodMap.get(moodId).getName();
             IssueDialogFragment.moodMap.put(moodName, moodId);
             list.add(moodName);
         }

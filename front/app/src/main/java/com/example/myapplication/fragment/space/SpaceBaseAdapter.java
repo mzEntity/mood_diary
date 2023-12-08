@@ -75,6 +75,7 @@ public class SpaceBaseAdapter extends BaseAdapter {
                 DiaryDetailFragment diaryDetailFragment = new DiaryDetailFragment();
                 Bundle args = new Bundle();
                 args.putInt("diaryId", bean.getDiaryId());
+                args.putInt("moodTypeId", bean.getMoodTypeId());
                 diaryDetailFragment.setArguments(args);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.fragment_container, diaryDetailFragment);
                 fragmentTransaction.addToBackStack(null);

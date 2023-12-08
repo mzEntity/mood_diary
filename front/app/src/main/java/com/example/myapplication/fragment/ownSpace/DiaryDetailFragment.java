@@ -1,6 +1,7 @@
 package com.example.myapplication.fragment.ownSpace;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
+import com.example.myapplication.common.Config;
 import com.example.myapplication.common.HTTPCallBack;
 import com.example.myapplication.common.HTTPHelper;
 import com.example.myapplication.common.Utils;
@@ -30,20 +32,26 @@ import java.util.List;
 
 public class DiaryDetailFragment extends Fragment {
     private DiaryDetailFragment.DiaryDetail diaryDetail;
+    private String moodPrefix;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.diary_detail_fragment_layout, container, false);
         SessionManager sessionManager = new SessionManager(requireContext());
         if(!sessionManager.isLoggedIn()){
             sessionManager.redirectToLogin(getParentFragmentManager());
-            return view;
+            return inflater.inflate(R.layout.diary_detail_fragment_layout, container, false);
         }
 
         Bundle args = getArguments();
         int diaryId = -1;
+        int moodTypeId = -1;
         if (args != null) {
             diaryId = args.getInt("diaryId");
+            moodTypeId = args.getInt("moodTypeId");
         }
+        this.moodPrefix = Config.moodMap.get(moodTypeId).getEnglish();
+        String layoutName = this.moodPrefix + "_diary_fragment_layout";
+        int layoutId = getResources().getIdentifier(layoutName, "layout", getContext().getPackageName());
+        View view = inflater.inflate(layoutId, container, false);
         getDiaryDetail(diaryId, view);
 
         return view;
@@ -66,10 +74,11 @@ public class DiaryDetailFragment extends Fragment {
                         String issueDate = responseObject.getString("issueDate");
                         String title = responseObject.getString("title");
                         String content = responseObject.getString("content");
+                        int moodTypeId = responseObject.getInt("moodTypeId");
 
                         DiaryDetailFragment.this.diaryDetail = new DiaryDetail(
                                 diaryId, authorId, authorName,
-                                issueDate, title, content
+                                issueDate, title, content, moodTypeId
                         );
 
                         setView(view, DiaryDetailFragment.this.diaryDetail);
@@ -109,14 +118,18 @@ public class DiaryDetailFragment extends Fragment {
         public String issueDate;
         public String title;
         public String content;
+        public int moodTypeId;
 
-        public DiaryDetail(int diaryId, int authorId, String authorName, String issueDate, String title, String content) {
+        public DiaryDetail(int diaryId, int authorId, String authorName, String issueDate, String title, String content, int moodTypeId) {
             this.diaryId = diaryId;
             this.authorId = authorId;
             this.authorName = authorName;
             this.issueDate = issueDate;
             this.title = title;
             this.content = content;
+            this.moodTypeId = moodTypeId;
         }
     }
+
+
 }
