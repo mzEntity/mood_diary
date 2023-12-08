@@ -44,7 +44,8 @@ public class GetDiaryDetailController {
                 author.getUsername(),
                 MyUtils.timestampToString(diary.getUpdatedAt()),
                 diary.getTitle(),
-                diary.getContent()
+                diary.getContent(),
+                diary.getMoodTypeId()
         );
         return ResultFactory.buildSuccessResult(result);
     }
@@ -57,14 +58,16 @@ class GetDiaryDetailResponsePackage{
     private String issueDate;
     private String title;
     private String content;
+    private int moodTypeId;
 
-    public GetDiaryDetailResponsePackage(int diaryId, int authorId, String authorName, String issueDate, String title, String content) {
+    public GetDiaryDetailResponsePackage(int diaryId, int authorId, String authorName, String issueDate, String title, String content, int moodTypeId) {
         this.diaryId = diaryId;
         this.authorId = authorId;
         this.authorName = authorName;
         this.issueDate = issueDate;
         this.title = title;
         this.content = content;
+        this.moodTypeId = moodTypeId;
     }
 
     public int getDiaryId() {
@@ -89,6 +92,10 @@ class GetDiaryDetailResponsePackage{
 
     public String getContent() {
         return content;
+    }
+
+    public int getMoodTypeId() {
+        return moodTypeId;
     }
 }
 
