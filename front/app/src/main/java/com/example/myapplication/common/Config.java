@@ -3,15 +3,13 @@ package com.example.myapplication.common;
 import java.util.HashMap;
 
 public class Config {
-    public static final String httpBasePath = "http://192.168.4.6:8080";
-
+//    public static final String httpBasePath = "http://192.168.4.6:8080";
+    public static final String httpBasePath = "http://10.223.231.244:8080";
     public static final HashMap<Integer, String> moodMap = new HashMap<>();
 
     public static final HashMap<Integer, String> requestMap = new HashMap<>();
 
     public static final HashMap<String, Integer> requestMapIS = new HashMap<>();
-
-    public static final String waitForCheck = "1";
 
     static {
         moodMap.put(1, "开心");

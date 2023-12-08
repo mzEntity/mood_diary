@@ -51,6 +51,7 @@ public class IssueDialogFragment extends DialogFragment {
         SessionManager sessionManager = new SessionManager(requireContext());
         if(!sessionManager.isLoggedIn()){
             sessionManager.redirectToLogin(getParentFragmentManager());
+            return view;
         }
         UserInfoItem user = sessionManager.getUserDetails();
 
@@ -61,10 +62,6 @@ public class IssueDialogFragment extends DialogFragment {
 
         Spinner spinner = view.findViewById(R.id.issue_mood_spinner);
         List<String> list = new ArrayList<>();
-        String[] allMoods = {"开心", "期待", "难受", "愤怒"};
-        for(String mood: allMoods){
-            list.add(mood);
-        }
         for(int moodId: Config.moodMap.keySet()){
             String moodName = Config.moodMap.get(moodId);
             IssueDialogFragment.moodMap.put(moodName, moodId);

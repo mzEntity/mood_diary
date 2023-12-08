@@ -28,6 +28,7 @@ public class DiscoveryFragment extends Fragment {
         SessionManager sessionManager = new SessionManager(requireContext());
         if(!sessionManager.isLoggedIn()){
             sessionManager.redirectToLogin(getParentFragmentManager());
+            return view;
         }
         UserInfoItem user = sessionManager.getUserDetails();
 

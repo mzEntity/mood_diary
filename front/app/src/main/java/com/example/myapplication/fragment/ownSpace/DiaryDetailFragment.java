@@ -36,6 +36,7 @@ public class DiaryDetailFragment extends Fragment {
         SessionManager sessionManager = new SessionManager(requireContext());
         if(!sessionManager.isLoggedIn()){
             sessionManager.redirectToLogin(getParentFragmentManager());
+            return view;
         }
 
         Bundle args = getArguments();
