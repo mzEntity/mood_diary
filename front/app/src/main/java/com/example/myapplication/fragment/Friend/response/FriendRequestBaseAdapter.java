@@ -111,7 +111,7 @@ public class FriendRequestBaseAdapter extends BaseAdapter {
             public void getSuccess(JSONObject returnObject, String msg) {
                 HTTPCallBack.super.getSuccess(returnObject, msg);
                 activity.runOnUiThread(()->{
-                    Utils.toastMsg(context, "respond " + requestId);
+                    Utils.toastMsg(context, msg);
                 });
             }
 
