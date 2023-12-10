@@ -23,7 +23,6 @@ import java.util.List;
 public class MakeFriendsController {
 
     private UserService userService;
-
     private FriendService friendService;
 
     @Autowired
@@ -32,26 +31,9 @@ public class MakeFriendsController {
         this.friendService = friendService;
     }
 
-    @GetMapping("/getAllRequestsSend")
-    public Result getAllRequestsSend(
-            @RequestParam(value = "userId") Integer userId,
-            @RequestParam(value = "stateId") Integer stateId
-    ){
-        boolean user_exist = this.userService.isUserExist( userId);
-        if(!user_exist){
-            return ResultFactory.buildFailResult(null, "User doesn't exist.");
-        }
-        boolean state_exist = this.friendService.isRequestStateExist(stateId);
-        if(!state_exist){
-            return ResultFactory.buildFailResult(null, "State doesn't exist.");
-        }
-        List<Friend> allRequests = this.friendService.getAllRequestsSend(userId, stateId);
-        return ResultFactory.buildSuccessResult(allRequests);
-    }
-
 
     @GetMapping("/getAllFriends")
-    public Result getAllFriends(
+    private Result getAllFriends(
             @RequestParam(value = "userId") Integer userId
     ){
         boolean user_exist = this.userService.isUserExist( userId);
@@ -68,18 +50,23 @@ public class MakeFriendsController {
     }
 
     @PostMapping("/requestFriend")
-    public Result requestFriend(@RequestBody RequestFriendPackage requestFriendPackage){
+    private Result requestFriend(@RequestBody RequestFriendPackage requestFriendPackage){
         int user_id = requestFriendPackage.getUser_id();
         String friend_name = requestFriendPackage.getFriend_name();
         String validation_msg = requestFriendPackage.getValidation_msg();
         User friend = this.userService.getUserByUserName(friend_name);
         User user = this.userService.getUserByUserId(user_id);
-        boolean user_exist = friend != null && user != null;
-        if(!user_exist){
+        if(friend == null || user == null){
             return ResultFactory.buildFailResult(null, "User doesn't exist.");
         }
+        if(user_id == friend.getId()){
+            return ResultFactory.buildFailResult(null, "不能向自己发送好友请求");
+        }
+        if(this.friendService.isFriend(user_id, friend.getId())){
+            return ResultFactory.buildFailResult(null, "不能重复添加好友");
+        }
         try{
-            friendService.requestFriend(user_id, friend.getId(),  validation_msg);
+            friendService.requestFriend(user_id, friend.getId(), validation_msg);
             return ResultFactory.buildSuccessResult(null);
         } catch(EntityDuplicateException entityDuplicateException){
             return ResultFactory.buildFailResult(null, entityDuplicateException.getMessage());
@@ -89,16 +76,17 @@ public class MakeFriendsController {
     }
 
     @PostMapping("/respondFriend")
-    public Result respondFriend(@RequestBody RespondFriendPackage respondFriendPackage){
+    private Result respondFriend(@RequestBody RespondFriendPackage respondFriendPackage){
         int id = respondFriendPackage.getRequest_id();
         int respond_id = respondFriendPackage.getType_id();
-        boolean request_exist = friendService.isRequestExist(id);
-        if(!request_exist){
+        Friend friendRequest = this.friendService.getRequestById(id);
+
+        if(friendRequest == null){
             return ResultFactory.buildFailResult(null, "Request doesn't exist.");
         }
-        boolean state_exist = this.friendService.isRequestStateExist(respond_id);
-        if(!state_exist){
-            return ResultFactory.buildFailResult(null, "Invalid request state.");
+        int expectedStateId = this.friendService.getStateIdByName("待审核");
+        if(friendRequest.getStateId() != expectedStateId){
+            return ResultFactory.buildFailResult(null, "不是待审核的请求");
         }
 
         try{
