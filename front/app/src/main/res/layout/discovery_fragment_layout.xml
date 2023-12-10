@@ -1,30 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- discovery_fragment_layout.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="top|center"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
     <TextView
+        android:id="@+id/discovery_rate_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="给你的心情打个分吧"
-        android:textSize="24sp" />
-
+        android:text="今天心情怎么样"
+        android:layout_marginLeft="20dp"
+        android:textSize="24dp" />
     <SeekBar
         android:id="@+id/mood_seekBar"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_below="@id/discovery_rate_label"
+        android:layout_marginTop="20dp"
+        android:layout_alignLeft="@id/discovery_rate_label"
         android:max="100" />
     <TextView android:id="@+id/mood_rate_val_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/mood_seekBar"
+        android:layout_alignTop="@id/mood_seekBar"
+        android:layout_marginLeft="20dp"
         android:textSize="20dp"
         android:text="rate val"/>
     <Button
         android:id="@+id/mood_rate_submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/mood_rate_val_text"
+        android:layout_alignLeft="@id/discovery_rate_label"
+        android:layout_marginTop="20dp"
         android:text="send" />
     <!-- 添加其他视图或控件 -->
-</LinearLayout>
+</RelativeLayout>
