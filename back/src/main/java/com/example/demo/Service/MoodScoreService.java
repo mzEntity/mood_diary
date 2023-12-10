@@ -42,8 +42,8 @@ public class MoodScoreService {
     }
 
     public List<MoodScore> getMonthlyMoodScore(int userId, int year, int month){
-        Date startDate = MyUtils.getStartDateOfMonth(year, month);
-        Date endDate = MyUtils.getStartDateOfNextMonth(year, month);
+        Date startDate = MyUtils.getDateFromLocalDate(MyUtils.getStartLocalDateOfMonth(year, month));
+        Date endDate = MyUtils.getDateFromLocalDate(MyUtils.getStartLocalDateOfNextMonth(year, month).minusDays(1));
         return this.moodScoreRepository.getMoodScoresByUserIdAndDateBetween(
                 userId, startDate, endDate
         );
