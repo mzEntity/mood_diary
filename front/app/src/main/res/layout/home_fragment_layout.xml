@@ -1,37 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- home_fragment_layout.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="top|center"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/welcome_home_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home Fragment"
-        android:textSize="24sp" />
-    <Button
-        android:id="@+id/logout_home_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="退出"></Button>
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="top|center"
         android:orientation="vertical">
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/mood_pieChart"
+        <TextView
+            android:id="@+id/welcome_home_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home Fragment"
+            android:textSize="24dp" />
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/mood_lineChart"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <Button
+                android:id="@+id/previous_home_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="previous"></Button>
+            <TextView
+                android:id="@+id/month_home_text"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="1970-01"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="24dp" />
+            <Button
+                android:id="@+id/next_home_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="next"></Button>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/mood_pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_weight="1" />
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/mood_lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/logout_home_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退出"></Button>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>
