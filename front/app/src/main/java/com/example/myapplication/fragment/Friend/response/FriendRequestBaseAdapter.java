@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -132,8 +133,8 @@ public class FriendRequestBaseAdapter extends BaseAdapter {
 
         public TextView dateView;
 
-        public Button permitBtn;
+        public ImageButton permitBtn;
 
-        public Button rejectBtn;
+        public ImageButton rejectBtn;
     }
 }

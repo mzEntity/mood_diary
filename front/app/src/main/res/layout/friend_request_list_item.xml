@@ -34,18 +34,24 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/friend_request_list_item_avatar"
         android:text="content here"/>
-    <Button
+    <ImageButton
         android:id="@+id/friend_request_list_item_reject_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_cross"
+        android:layout_alignTop="@id/friend_request_list_item_permit_button"
         android:layout_toLeftOf="@id/friend_request_list_item_permit_button"
-        android:layout_alignParentTop="true"
-        android:text="reject" />
-    <Button
+        android:layout_marginRight="5dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="reject" />
+    <ImageButton
         android:id="@+id/friend_request_list_item_permit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_tick"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="permit" />
+        android:layout_alignTop="@id/friend_request_list_item_avatar"
+        android:layout_marginRight="20dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="permit" />
 </RelativeLayout>
