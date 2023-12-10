@@ -9,13 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="space"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"></TextView>
         <ImageButton android:id="@+id/space_add_button"
             android:layout_width="50dp"
             android:layout_height="50dp"

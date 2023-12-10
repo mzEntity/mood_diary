@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.common.HTTPCallBack;
 import com.example.myapplication.common.HTTPHelper;
 import com.example.myapplication.common.Utils;
+import com.example.myapplication.fragment.Friend.request.AddFriendDialogFragment;
 import com.example.myapplication.fragment.space.SpaceBaseAdapter;
 import com.example.myapplication.fragment.space.SpaceItem;
 import com.example.myapplication.main.SessionManager;
@@ -53,6 +55,15 @@ public class HomeFragment extends Fragment {
         TextView textView = view.findViewById(R.id.welcome_home_text);
         textView.setText("Welcome " + user.getUsername());
         getMonthlyMoodScore(user.getId(), year, month, view);
+
+        Button logoutBtn = view.findViewById(R.id.logout_home_button);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sessionManager.logoutUser();
+                sessionManager.redirectToLogin(getParentFragmentManager());
+            }
+        });
         return view;
     }
 
