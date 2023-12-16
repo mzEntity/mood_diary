@@ -75,8 +75,9 @@ public class SpaceFragment extends Fragment {
                             int moodTypeId = diary.getInt("moodTypeId");
                             String title = diary.getString("title");
                             String content = diary.getString("content");
+                            String avatar = diary.getString("avatar");
                             String updatedAt = diary.getString("updatedAt");
-                            spaceItemList.add(new SpaceItem(id, authorName, updatedAt, title, content, moodTypeId));
+                            spaceItemList.add(new SpaceItem(id, authorName, updatedAt, title, content, avatar, moodTypeId));
                         }
                         ListView lv = view.findViewById(R.id.space_list);
                         SpaceBaseAdapter adapter = new SpaceBaseAdapter(requireActivity().getSupportFragmentManager(),

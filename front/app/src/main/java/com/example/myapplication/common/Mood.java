@@ -1,7 +1,7 @@
 package com.example.myapplication.common;
 
 public enum Mood {
-    JOY(1, "开心", "happy"),
+    JOY(1, "开心", "joy"),
     ANTICIPATE(2, "期待", "anticipate"),
     SAD(3, "难过", "sad"),
     CALM(4, "平静", "calm"),

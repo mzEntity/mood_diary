@@ -3,17 +3,44 @@ package com.example.myapplication.common;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HTTPHelper {
+    public static void postFile(String relativeUrl, File file, HTTPCallBack callBack){
+        new Thread(() -> {
+            String url = Config.httpBasePath + relativeUrl;
+            OkHttpClient client = new OkHttpClient();
+            RequestBody fileBody = RequestBody.create(file, MediaType.parse("multipart/form-data"));
+            MultipartBody body = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("fileUpload", file.getName(), fileBody)
+                    .build();
+
+            Request request = new Request.Builder().url(url).post(body).build();
+            try{
+                Response response = client.newCall(request).execute();
+                if(response.code() == 200){
+                    JSONObject jsonResponse = new JSONObject(response.body().string());
+                    onSuccess(jsonResponse, callBack);
+                }
+                else{
+                    onFailure(callBack);
+                }
+            } catch (JSONException | IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
     public static void post(String relativeUrl, JSONObject requestObject, HTTPCallBack callBack){
         new Thread(() -> {
             String url = Config.httpBasePath + relativeUrl;

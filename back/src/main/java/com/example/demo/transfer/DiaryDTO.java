@@ -10,22 +10,27 @@ public class DiaryDTO {
 
     private String title;
     private String content;
+
+    private String avatar;
+
     private Timestamp updated_at;
 
-    public DiaryDTO(int author_id, int mood_type_id, String title, String content, Timestamp updated_at) {
+    public DiaryDTO(int author_id, int mood_type_id, String title, String content, String avatar, Timestamp updated_at) {
         this.author_id = author_id;
         this.mood_type_id = mood_type_id;
         this.title = title;
         this.content = content;
+        this.avatar = avatar;
         this.updated_at = updated_at;
     }
 
-    public DiaryDTO(int id, int author_id, int mood_type_id, String title, String content, Timestamp updated_at) {
+    public DiaryDTO(int id, int author_id, int mood_type_id, String title, String content, String avatar, Timestamp updated_at) {
         this.id = id;
         this.author_id = author_id;
         this.mood_type_id = mood_type_id;
         this.title = title;
         this.content = content;
+        this.avatar = avatar;
         this.updated_at = updated_at;
     }
 
@@ -67,6 +72,14 @@ public class DiaryDTO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Timestamp getUpdated_at() {

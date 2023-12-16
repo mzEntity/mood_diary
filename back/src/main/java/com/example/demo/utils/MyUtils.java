@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class MyUtils {
+    public static String projectDir = System.getProperty("user.dir");
 
     public static Timestamp getCurrentTimestamp(){
         return new Timestamp(System.currentTimeMillis());

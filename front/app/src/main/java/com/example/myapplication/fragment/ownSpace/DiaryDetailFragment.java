@@ -1,12 +1,20 @@
 package com.example.myapplication.fragment.ownSpace;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -26,6 +34,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,11 +87,12 @@ public class DiaryDetailFragment extends Fragment {
                         String issueDate = responseObject.getString("issueDate");
                         String title = responseObject.getString("title");
                         String content = responseObject.getString("content");
+                        String avatar = responseObject.getString("avatar");
                         int moodTypeId = responseObject.getInt("moodTypeId");
 
                         DiaryDetailFragment.this.diaryDetail = new DiaryDetail(
                                 diaryId, authorId, authorName,
-                                issueDate, title, content, moodTypeId
+                                issueDate, title, content, avatar, moodTypeId
                         );
 
                         setView(view, DiaryDetailFragment.this.diaryDetail);
@@ -104,11 +118,62 @@ public class DiaryDetailFragment extends Fragment {
         TextView dateView = view.findViewById(R.id.diary_detail_date);
         TextView titleView = view.findViewById(R.id.diary_detail_title);
         TextView contentView = view.findViewById(R.id.diary_detail_content);
+        ImageView imageView = view.findViewById(R.id.diary_detail_image);
 
         authorView.setText(diaryDetail.authorName);
         dateView.setText(diaryDetail.issueDate);
         titleView.setText(diaryDetail.title);
         contentView.setText(diaryDetail.content);
+
+        String avatar = diaryDetail.avatar;
+
+        if(avatar == null){
+            return;
+        }
+
+        new LoadImageTask(imageView).execute(Config.httpBasePath + "/" + avatar);
+    }
+
+    private static class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
+        private final WeakReference<ImageView> imageViewRef;
+
+        public LoadImageTask(ImageView imageView) {
+            imageViewRef = new WeakReference<>(imageView);
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            String imageUrl = strings[0];
+            Bitmap bitmap = null;
+
+            try {
+                URL url = new URL(imageUrl);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+                urlConnection.setRequestMethod("GET");
+                // 配置网络超时时间为 10秒
+                urlConnection.setConnectTimeout(10000);
+
+                // 获取 Http 响应码
+                int responseCode = urlConnection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = urlConnection.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(inputStream);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            ImageView imageView = imageViewRef.get();
+            if (imageView != null && bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
     }
 
     private class DiaryDetail {
@@ -118,15 +183,17 @@ public class DiaryDetailFragment extends Fragment {
         public String issueDate;
         public String title;
         public String content;
+        public String avatar;
         public int moodTypeId;
 
-        public DiaryDetail(int diaryId, int authorId, String authorName, String issueDate, String title, String content, int moodTypeId) {
+        public DiaryDetail(int diaryId, int authorId, String authorName, String issueDate, String title, String content, String avatar, int moodTypeId) {
             this.diaryId = diaryId;
             this.authorId = authorId;
             this.authorName = authorName;
             this.issueDate = issueDate;
             this.title = title;
             this.content = content;
+            this.avatar = avatar;
             this.moodTypeId = moodTypeId;
         }
     }

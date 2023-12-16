@@ -20,6 +20,8 @@ public class Diary {
     private Integer moodTypeId;
     private String title;
     private String content;
+
+    private String avatar;
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
@@ -29,15 +31,17 @@ public class Diary {
         this.moodTypeId = diaryDTO.getMood_type_id();
         this.title = diaryDTO.getTitle();
         this.content = diaryDTO.getContent();
+        this.avatar = diaryDTO.getAvatar();
         this.updatedAt = diaryDTO.getUpdated_at();
     }
 
-    public Diary(Integer id, Integer authorId, Integer moodTypeId, String title, String content, Timestamp updatedAt) {
+    public Diary(Integer id, Integer authorId, Integer moodTypeId, String title, String content, String avatar, Timestamp updatedAt) {
         this.id = id;
         this.authorId = authorId;
         this.moodTypeId = moodTypeId;
         this.title = title;
         this.content = content;
+        this.avatar = avatar;
         this.updatedAt = updatedAt;
     }
 
@@ -83,6 +87,14 @@ public class Diary {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Timestamp getUpdatedAt() {

@@ -1,6 +1,7 @@
 package com.example.myapplication.fragment.discovery;
 
 // DiscoveryFragment.java
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.common.HTTPCallBack;
 import com.example.myapplication.common.HTTPHelper;
 import com.example.myapplication.common.Utils;
+import com.example.myapplication.main.MediaManager;
 import com.example.myapplication.main.SessionManager;
 import com.example.myapplication.main.UserInfoItem;
 
@@ -21,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DiscoveryFragment extends Fragment {
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.discovery_fragment_layout, container, false);

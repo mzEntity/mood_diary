@@ -52,6 +52,8 @@ class DiaryResponse{
     private Integer moodTypeId;
     private String title;
     private String content;
+
+    private String avatar;
     private String updatedAt;
 
     public DiaryResponse(Diary diary) {
@@ -60,6 +62,7 @@ class DiaryResponse{
         this.moodTypeId = diary.getMoodTypeId();
         this.title = diary.getTitle();
         this.content = diary.getContent();
+        this.avatar = diary.getAvatar();
         this.updatedAt = MyUtils.timestampToString(diary.getUpdatedAt());
     }
 
@@ -81,6 +84,10 @@ class DiaryResponse{
 
     public String getContent() {
         return content;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     public String getUpdatedAt() {

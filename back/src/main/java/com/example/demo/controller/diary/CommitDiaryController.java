@@ -36,7 +36,7 @@ public class CommitDiaryController {
         int mood_type_id = commitDiaryPackage.getMood_type_id();
         String title = commitDiaryPackage.getTitle();
         String content = commitDiaryPackage.getContent();
-
+        String avatar = commitDiaryPackage.getAvatar();
         boolean author_exist = this.userService.isUserExist(author_id);
         if(!author_exist){
             return ResultFactory.buildFailResult(null, "User doesn't exist.");
@@ -47,7 +47,7 @@ public class CommitDiaryController {
             return ResultFactory.buildFailResult(null, "Mood type doesn't exist.");
         }
 
-        DiaryDTO diaryDTO = new DiaryDTO(author_id, mood_type_id, title, content, MyUtils.getCurrentTimestamp());
+        DiaryDTO diaryDTO = new DiaryDTO(author_id, mood_type_id, title, content, avatar, MyUtils.getCurrentTimestamp());
         try{
             int diaryId = this.diaryService.createDiary(diaryDTO);
             return ResultFactory.buildSuccessResult(diaryId);
@@ -64,6 +64,8 @@ class CommitDiaryPackage{
     private String title;
     private String content;
 
+    private String avatar;
+
     public int getAuthor_id() {
         return author_id;
     }
@@ -78,5 +80,9 @@ class CommitDiaryPackage{
 
     public String getContent() {
         return content;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 }

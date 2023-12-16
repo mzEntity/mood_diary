@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Config {
     public static final String httpBasePath = "http://192.168.4.6:8080";
-//    public static final String httpBasePath = "http://10.223.231.244:8080";
+//    public static final String httpBasePath = "http://10.223.211.32:8080";
     public static final HashMap<Integer, Mood> moodMap = new HashMap<>();
 
     public static final HashMap<Integer, String> requestMap = new HashMap<>();

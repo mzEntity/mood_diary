@@ -10,12 +10,15 @@ public class SpaceItem {
 
     private int moodTypeId;
 
-    public SpaceItem(int diaryId, String author, String date, String title, String content, int moodTypeId) {
+    private String avatar;
+
+    public SpaceItem(int diaryId, String author, String date, String title, String content, String avatar, int moodTypeId) {
         this.diaryId = diaryId;
         this.author = author;
         this.date = date;
         this.title = title;
         this.content = content;
+        this.avatar = avatar;
         this.moodTypeId = moodTypeId;
     }
 
@@ -41,5 +44,9 @@ public class SpaceItem {
 
     public int getMoodTypeId() {
         return moodTypeId;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 }

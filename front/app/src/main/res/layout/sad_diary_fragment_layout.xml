@@ -68,5 +68,11 @@
             android:layout_below="@id/diary_detail_header"
             android:text="content here"
             android:textColor="@color/white"/>
+        <ImageView
+            android:id="@+id/diary_detail_image"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_below="@id/diary_detail_content"
+            android:layout_marginTop="20dp" />
     </RelativeLayout>
 </LinearLayout>

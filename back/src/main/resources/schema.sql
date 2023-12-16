@@ -38,7 +38,9 @@ CREATE TABLE `diary`
     `mood_type_id`  int(3) NOT NULL,
     `title`    varchar(255) NOT NULL COMMENT '标题',
     `content`    TEXT NOT NULL COMMENT '内容',
+    `avatar`    TEXT,
     `updated_at` timestamp COMMENT '更新日期',
+
     PRIMARY KEY (`id`),
     FOREIGN KEY (`author_id`) REFERENCES user(`id`),
     FOREIGN KEY (`mood_type_id`) REFERENCES mood(`id`)

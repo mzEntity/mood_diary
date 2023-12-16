@@ -1,15 +1,26 @@
 package com.example.myapplication.fragment.space.issue;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +30,17 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.myapplication.R;
@@ -37,11 +54,26 @@ import com.example.myapplication.main.UserInfoItem;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class IssueDialogFragment extends DialogFragment {
+    private ImageView imageView;
+
+    private EditText etTitle;
+    private EditText etContent;
+
+    private Spinner spinner;
+
+    private int userId;
 
     private static HashMap<String, Integer> moodMap = new HashMap<>();
     @Override
@@ -53,14 +85,16 @@ public class IssueDialogFragment extends DialogFragment {
             sessionManager.redirectToLogin(getParentFragmentManager());
             return view;
         }
+
+        tryToGetImage();
         UserInfoItem user = sessionManager.getUserDetails();
 
-        int userId = user.getId();
+        userId = user.getId();
 
-        EditText etTitle = view.findViewById(R.id.issue_title_edit);
-        EditText etContent = view.findViewById(R.id.issue_content_edit);
+        etTitle = view.findViewById(R.id.issue_title_edit);
+        etContent = view.findViewById(R.id.issue_content_edit);
 
-        Spinner spinner = view.findViewById(R.id.issue_mood_spinner);
+        spinner = view.findViewById(R.id.issue_mood_spinner);
         List<String> list = new ArrayList<>();
         for(int moodId: Config.moodMap.keySet()){
             String moodName = Config.moodMap.get(moodId).getName();
@@ -84,14 +118,79 @@ public class IssueDialogFragment extends DialogFragment {
                     // 处理发布逻辑
                     Toast.makeText(requireContext(), title + "(" + mood + "): " + content, Toast.LENGTH_SHORT).show();
                     int moodId = IssueDialogFragment.moodMap.get(mood);
-                    commitDiary(userId, moodId, title, content);
+                    if(IssueDialogFragment.this.file != null){
+                        Utils.toastMsg(requireContext(), "upload file");
+                        uploadFile(IssueDialogFragment.this.file);
+                    }
+                    else {
+                        Utils.toastMsg(requireContext(), "issue directly");
+                        commitDiary(userId, moodId, title, content, null);
+                    }
                 } else {
                     Toast.makeText(requireContext(), "Please enter an issue", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+        imageView = view.findViewById(R.id.issue_image_preview);
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri result) {
+                Log.i("IssueDialogFragment", "" + result);
+                String filePath = getRealPathFromUri(result);
+
+                File file = new File(filePath);
+                IssueDialogFragment.this.file = file;
+                displayImage(filePath);
+            }
+        });
+
+        Button pickImageButton = view.findViewById(R.id.issue_choose_image);
+        pickImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imagePickerLauncher.launch("image/*");
+            }
+        });
+
         return view;
+    }
+
+    private void displayImage(String filePath){
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        imageView.setImageBitmap(bitmap);
+    }
+
+    private File file;
+    private String getRealPathFromUri(Uri uri) {
+        String filePath = "";
+        String scheme = uri.getScheme();
+
+        if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            String documentId = DocumentsContract.getDocumentId(uri);
+            String[] split = documentId.split(":");
+            String type = split[0];
+            Uri contentUri = null;
+
+            if ("image".equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            }
+
+            String selection = "_id=?";
+            String[] selectionArgs = new String[]{split[1]};
+
+            String[] projection = {MediaStore.Images.Media.DATA};
+            try (Cursor cursor = getContext().getContentResolver().query(contentUri, projection, selection, selectionArgs, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    filePath = cursor.getString(columnIndex);
+                }
+            }
+        } else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            filePath= uri.getPath();
+        }
+
+        return filePath;
     }
 
     @NonNull
@@ -119,13 +218,17 @@ public class IssueDialogFragment extends DialogFragment {
         win.setAttributes(params);
     }
 
-    public void commitDiary(int authorId, int moodTypeId, String title, String content){
+    public void commitDiary(int authorId, int moodTypeId, String title, String content, String avatar){
         JSONObject requestObject = new JSONObject();
         try{
             requestObject.put("author_id", authorId);
             requestObject.put("mood_type_id", moodTypeId);
             requestObject.put("title", title);
             requestObject.put("content", content);
+            Log.i("IssueDialogFragment", "" + avatar);
+            if(avatar != null){
+                requestObject.put("avatar", avatar);
+            }
         } catch (JSONException e){
             Utils.toastMsg(requireContext(), "Error in sending request");
         }
@@ -145,6 +248,47 @@ public class IssueDialogFragment extends DialogFragment {
                 HTTPCallBack.super.getNotSuccess(returnObject, msg);
                 getActivity().runOnUiThread(()->{
                     Utils.toastMsg(requireContext(), msg);
+                });
+            }
+        });
+    }
+
+    private static final int READ_EXTERNAL_STORAGE_PERMISSION = 2;
+    void tryToGetImage(){
+        if(ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_PERMISSION);
+        }
+    }
+
+
+    private ActivityResultLauncher<String> imagePickerLauncher;
+
+
+    public void uploadFile(File file){
+        HTTPHelper.postFile("/upload", file, new HTTPCallBack() {
+            @Override
+            public void getSuccess(JSONObject returnObject, String msg) {
+                getActivity().runOnUiThread(()->{
+                    Utils.toastMsg(getContext(), msg);
+                    try {
+                        JSONObject responseObject = returnObject.getJSONObject("object");
+                        String title = etTitle.getText().toString().trim();
+                        String content = etContent.getText().toString().trim();
+                        String mood = spinner.getSelectedItem().toString().trim();
+                        int moodId = IssueDialogFragment.moodMap.get(mood);
+                        String avatar = responseObject.getString("avatar");
+                        commitDiary(userId, moodId, title, content, avatar);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+            }
+
+            @Override
+            public void getNotSuccess(JSONObject returnObject, String msg) {
+                getActivity().runOnUiThread(()->{
+                    Utils.toastMsg(getContext(), msg);
                 });
             }
         });
