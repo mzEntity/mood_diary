@@ -1,9 +1,16 @@
 package com.example.myapplication.fragment.home;
 
 // HomeFragment.java
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +45,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
+
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -48,6 +55,15 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     private int year_check;
     private int month_check;
+
+    private UserInfoItem user;
+
+    private LineChart lineChart;
+    private PieChart pieChart;
+
+    private TextView monthText;
+
+    private TextView welcomeView;
 
     public HomeFragment() {
         this.year_check = Utils.getCurrentYear();
@@ -65,11 +81,17 @@ public class HomeFragment extends Fragment {
         }
         UserInfoItem user = sessionManager.getUserDetails();
 
-        TextView textView = view.findViewById(R.id.welcome_home_text);
-        textView.setText("Welcome " + user.getUsername());
+        this.user = user;
+
+        welcomeView = view.findViewById(R.id.welcome_home_text);
+
+        lineChart = view.findViewById(R.id.mood_lineChart);
+        pieChart = view.findViewById(R.id.mood_pieChart);
+
+        monthText = view.findViewById(R.id.month_home_text);
 
         
-        renderInfo(user.getId(), view);
+        renderInfo();
         
 
         Button nextMonthBtn = view.findViewById(R.id.next_home_button);
@@ -81,7 +103,7 @@ public class HomeFragment extends Fragment {
                     HomeFragment.this.month_check = 1;
                     HomeFragment.this.year_check += 1;
                 }
-                renderInfo(user.getId(), view);
+                renderInfo();
             }
         });
         Button previousMonthBtn = view.findViewById(R.id.previous_home_button);
@@ -93,7 +115,7 @@ public class HomeFragment extends Fragment {
                     HomeFragment.this.month_check = 12;
                     HomeFragment.this.year_check -= 1;
                 }
-                renderInfo(user.getId(), view);
+                renderInfo();
             }
         });
 
@@ -107,26 +129,49 @@ public class HomeFragment extends Fragment {
         });
         return view;
     }
-    
-    private void setMonth(View view){
-        TextView monthView = view.findViewById(R.id.month_home_text);
+
+    private BroadcastReceiver loginSuccessReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            Log.i("HomeFragment", "receive message " + action);
+            if ("LOGIN_SUCCESS".equals(action)) {
+                // 执行刷新操作，更新数据
+                UserInfoItem user = new SessionManager(context).getUserDetails();
+                HomeFragment.this.user = user;
+                Log.i("HomeFragment", "do render");
+                renderInfo();
+                Log.i("HomeFragment", "render finish");
+            }
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // 在onResume方法中注册广播接收器
+        IntentFilter intentFilter = new IntentFilter("LOGIN_SUCCESS");
+        getActivity().registerReceiver(loginSuccessReceiver, intentFilter);
+        Log.i("HomeFragment", "bind receiver");
+    }
+
+    private void setHeader(){
+        welcomeView.setText("welcome " + user.getUsername());
         StringBuilder text = new StringBuilder(this.year_check + "-");
         if(this.month_check < 10){
             text.append("0");
         }
         text.append(this.month_check);
-        monthView.setText(text);
+        monthText.setText(text);
     }
 
-    private void renderInfo(int userId, View view){
-        setMonth(view);
-        getMonthlyMoodScore(userId, this.year_check, this.month_check, view);
-        getMonthlyDiaryStats(userId, this.year_check, this.month_check, view);
+    private void renderInfo(){
+        setHeader();
+        getMonthlyMoodScore();
+        getMonthlyDiaryStats();
     }
 
-    private void renderPieChart(View view, List<DiaryStatsItem> stats){
-        PieChart pieChart = view.findViewById(R.id.mood_pieChart);
-
+    private void renderPieChart(List<DiaryStatsItem> stats){
         List<PieEntry> entries = new ArrayList<>();
 
         for(DiaryStatsItem diaryStatsItem: stats){
@@ -150,8 +195,7 @@ public class HomeFragment extends Fragment {
         pieChart.invalidate();
     }
 
-    private void renderLinearChart(View view, List<MoodScoreItem> scores){
-        LineChart lineChart = view.findViewById(R.id.mood_lineChart);
+    private void renderLinearChart(List<MoodScoreItem> scores){
 
         List<Entry> entries = new ArrayList<>();
         for(MoodScoreItem moodScoreItem: scores){
@@ -190,12 +234,12 @@ public class HomeFragment extends Fragment {
         lineChart.invalidate();
     }
 
-    void getMonthlyMoodScore(int userId, int year, int month, View view){
+    void getMonthlyMoodScore(){
         String url = "/getMonthlyMoodScore";
         HashMap<String, String> params = new HashMap<>();
-        params.put("userId", "" + userId);
-        params.put("year", "" + year);
-        params.put("month", "" + month);
+        params.put("userId", "" + user.getId());
+        params.put("year", "" + year_check);
+        params.put("month", "" + month_check);
         HTTPHelper.get(url, params, new HTTPCallBack() {
             @Override
             public void getSuccess(JSONObject returnObject, String msg) {
@@ -216,7 +260,7 @@ public class HomeFragment extends Fragment {
                                     dateArr[0], dateArr[1], dateArr[2], score
                             ));
                         }
-                        renderLinearChart(view, scores);
+                        renderLinearChart(scores);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
@@ -233,12 +277,12 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    void getMonthlyDiaryStats(int userId, int year, int month, View view){
+    void getMonthlyDiaryStats(){
         String url = "/getMonthlyDiaryStats";
         HashMap<String, String> params = new HashMap<>();
-        params.put("userId", "" + userId);
-        params.put("year", "" + year);
-        params.put("month", "" + month);
+        params.put("userId", "" + user.getId());
+        params.put("year", "" + year_check);
+        params.put("month", "" + month_check);
         HTTPHelper.get(url, params, new HTTPCallBack() {
             @Override
             public void getSuccess(JSONObject returnObject, String msg) {
@@ -252,10 +296,10 @@ public class HomeFragment extends Fragment {
                         for(int moodId: allMoods.keySet()){
                             String moodName = allMoods.get(moodId).getName();
                             int count = countMap.getInt(moodName);
-                            stats.add(new DiaryStatsItem(moodId, moodName, count, year, month));
+                            stats.add(new DiaryStatsItem(moodId, moodName, count, year_check, month_check));
                         }
 
-                        renderPieChart(view, stats);
+                        renderPieChart(stats);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }

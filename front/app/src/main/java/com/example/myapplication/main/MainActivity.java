@@ -1,18 +1,19 @@
 package com.example.myapplication.main;
 
 // MainActivity.java
+import static android.app.PendingIntent.getService;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.media.MediaPlayer;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.Menu;
-import android.widget.Button;
+
 import androidx.appcompat.widget.Toolbar;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         toolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(toolbar);
@@ -64,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
             return true;
         });
+
+        final Intent notificationIntent = new Intent(this, MyNotification.class);
+        startService(notificationIntent);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         SessionManager sessionManager = new SessionManager(this);

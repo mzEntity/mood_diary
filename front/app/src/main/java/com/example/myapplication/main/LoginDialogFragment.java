@@ -1,6 +1,7 @@
 package com.example.myapplication.main;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -31,18 +32,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginDialogFragment extends DialogFragment {
+    private EditText etUsername;
+    private EditText etPassword;
 
+    private RadioGroup radioGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.login_layout, container, false);
 
-        EditText etUsername = view.findViewById(R.id.login_username_edit);
-        EditText etPassword = view.findViewById(R.id.login_password_edit);
+        etUsername = view.findViewById(R.id.login_username_edit);
+        etPassword = view.findViewById(R.id.login_password_edit);
+        radioGroup = view.findViewById(R.id.login_radio_group);
 
-        RadioGroup radioGroup = view.findViewById(R.id.login_radio_group);
         Button btnSubmit = view.findViewById(R.id.login_submit_button);
-
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +89,8 @@ public class LoginDialogFragment extends DialogFragment {
                         SessionManager sessionManager = new SessionManager(requireContext());
                         sessionManager.createLoginSession(username, userId);
                         Utils.toastMsg(requireContext(), "Hello " + username);
+                        Intent intent = new Intent("LOGIN_SUCCESS");
+                        getActivity().sendBroadcast(intent);
                         dismiss();
                     }catch (JSONException e){
                     }
@@ -143,7 +148,6 @@ public class LoginDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         Window win = getDialog().getWindow();
-        // 一定要设置Background，如果不设置，window属性设置无效
         win.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
         DisplayMetrics dm = new DisplayMetrics();
@@ -151,7 +155,6 @@ public class LoginDialogFragment extends DialogFragment {
 
         WindowManager.LayoutParams params = win.getAttributes();
         params.gravity = Gravity.BOTTOM;
-        // 使用ViewGroup.LayoutParams，以便Dialog 宽度充满整个屏幕
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
         win.setAttributes(params);

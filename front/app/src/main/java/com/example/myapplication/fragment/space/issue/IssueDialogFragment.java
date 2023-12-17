@@ -75,6 +75,8 @@ public class IssueDialogFragment extends DialogFragment {
 
     private int userId;
 
+    private ActivityResultLauncher<String> imagePickerLauncher;
+
     private static HashMap<String, Integer> moodMap = new HashMap<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -204,7 +206,6 @@ public class IssueDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         Window win = getDialog().getWindow();
-        // 一定要设置Background，如果不设置，window属性设置无效
         win.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
         DisplayMetrics dm = new DisplayMetrics();
@@ -212,7 +213,6 @@ public class IssueDialogFragment extends DialogFragment {
 
         WindowManager.LayoutParams params = win.getAttributes();
         params.gravity = Gravity.BOTTOM;
-        // 使用ViewGroup.LayoutParams，以便Dialog 宽度充满整个屏幕
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
         win.setAttributes(params);
@@ -259,10 +259,6 @@ public class IssueDialogFragment extends DialogFragment {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_PERMISSION);
         }
     }
-
-
-    private ActivityResultLauncher<String> imagePickerLauncher;
-
 
     public void uploadFile(File file){
         HTTPHelper.postFile("/upload", file, new HTTPCallBack() {

@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FriendFragment extends Fragment {
+    private ListView listView;
+    private int userId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.friend_fragment_layout, container, false);
@@ -44,9 +46,10 @@ public class FriendFragment extends Fragment {
         }
         UserInfoItem user = sessionManager.getUserDetails();
 
-        int userId = user.getId();
+        listView = view.findViewById(R.id.friend_list);
+        userId = user.getId();
 
-        getFriendList(userId, view);
+        getFriendList(userId, listView);
 
         ImageButton btnAdd = view.findViewById(R.id.friend_add_button);
 
@@ -73,7 +76,13 @@ public class FriendFragment extends Fragment {
         return view;
     }
 
-    void getFriendList(int userId, View view){
+    @Override
+    public void onResume() {
+        super.onResume();
+        getFriendList(userId, listView);
+    }
+
+    void getFriendList(int userId, ListView lv){
         String url = "/getAllFriends";
         HashMap<String, String> params = new HashMap<>();
         params.put("userId", "" + userId);
@@ -92,10 +101,8 @@ public class FriendFragment extends Fragment {
                             String name = friend.getString("name");
                             friendItemList.add(new FriendItem(id, name));
                         }
-                        ListView lv = view.findViewById(R.id.friend_list);
                         FriendBaseAdapter adapter = new FriendBaseAdapter(requireActivity().getSupportFragmentManager(),
-                                view.getContext(), friendItemList);
-
+                                getContext(), friendItemList);
                         lv.setAdapter(adapter);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);

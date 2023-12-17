@@ -1,6 +1,7 @@
 package com.example.myapplication.fragment.discovery;
 
 // DiscoveryFragment.java
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -80,6 +81,10 @@ public class DiscoveryFragment extends Fragment {
                 HTTPCallBack.super.getSuccess(returnObject, msg);
                 getActivity().runOnUiThread(()->{
                     Utils.toastMsg(requireContext(), "rate " + score);
+                    Intent intent = new Intent("RATE_SCORE");
+                    intent.putExtra("score", score);
+
+                    getActivity().sendBroadcast(intent);
                 });
             }
 

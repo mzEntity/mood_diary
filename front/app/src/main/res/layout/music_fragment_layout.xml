@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/music_title_text"
         android:layout_toLeftOf="@id/music_title_text"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
         android:text="prev" />
     <TextView android:id="@+id/music_title_text"
         android:layout_width="wrap_content"
@@ -25,15 +25,15 @@
         android:layout_below="@id/music_avatar"
         android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
-        android:textSize="30dp"
-        android:text="rate val"/>
+        android:textSize="20dp"
+        android:text=""/>
     <Button
         android:id="@+id/media_right_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/music_title_text"
         android:layout_toRightOf="@id/music_title_text"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:text="next" />
     <Button
         android:id="@+id/media_start"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/music_title_text"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="100dp"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="30dp"
         android:text="start" />
     <Button
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/media_start"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="100dp"
+        android:layout_marginRight="50dp"
         android:text="stop" />
     <!-- 添加其他视图或控件 -->
 </RelativeLayout>
