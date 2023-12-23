@@ -69,11 +69,6 @@ public class MainActivity extends AppCompatActivity {
         startService(notificationIntent);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        SessionManager sessionManager = new SessionManager(this);
-        if(!sessionManager.isLoggedIn()){
-            sessionManager.redirectToLogin(fragmentManager);
-        }
-
         fragmentManager.beginTransaction().replace(R.id.fragment_container, new DiscoveryFragment()).commit();
     }
 

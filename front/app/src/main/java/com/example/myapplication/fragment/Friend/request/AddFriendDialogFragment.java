@@ -101,6 +101,9 @@ public class AddFriendDialogFragment extends DialogFragment {
             @Override
             public void getSuccess(JSONObject returnObject, String msg) {
                 HTTPCallBack.super.getSuccess(returnObject, msg);
+                if(getActivity() == null){
+                    return;
+                }
                 getActivity().runOnUiThread(()->{
                     Utils.toastMsg(requireContext(), "request success");
                     dismiss();
@@ -110,6 +113,9 @@ public class AddFriendDialogFragment extends DialogFragment {
             @Override
             public void getNotSuccess(JSONObject returnObject, String msg) {
                 HTTPCallBack.super.getNotSuccess(returnObject, msg);
+                if(getActivity() == null){
+                    return;
+                }
                 getActivity().runOnUiThread(()->{
                     Utils.toastMsg(requireContext(), msg);
                 });

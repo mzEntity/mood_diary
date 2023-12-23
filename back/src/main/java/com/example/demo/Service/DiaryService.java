@@ -67,12 +67,12 @@ public class DiaryService {
     }
 
     public List<Diary> getUserDiaries(int id){
-        return diaryRepository.findDiariesByAuthorId(id);
+        return diaryRepository.findDiariesByAuthorIdOrderByUpdatedAtDesc(id);
     }
     private HashMap<Integer, List<Diary>> getAllDiaries(List<Integer> idList){
         HashMap<Integer, List<Diary>> result = new HashMap<>();
         for(int author_id: idList){
-            List<Diary> diaries = diaryRepository.findDiariesByAuthorId(author_id);
+            List<Diary> diaries = diaryRepository.findDiariesByAuthorIdOrderByUpdatedAtDesc(author_id);
             if(diaries.isEmpty()){
                 continue;
             }

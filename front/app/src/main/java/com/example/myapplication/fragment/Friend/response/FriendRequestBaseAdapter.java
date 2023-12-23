@@ -110,6 +110,9 @@ public class FriendRequestBaseAdapter extends BaseAdapter {
             @Override
             public void getSuccess(JSONObject returnObject, String msg) {
                 HTTPCallBack.super.getSuccess(returnObject, msg);
+                if(activity == null){
+                    return;
+                }
                 activity.runOnUiThread(()->{
                     Utils.toastMsg(context, msg);
                 });
@@ -118,6 +121,9 @@ public class FriendRequestBaseAdapter extends BaseAdapter {
             @Override
             public void getNotSuccess(JSONObject returnObject, String msg) {
                 HTTPCallBack.super.getNotSuccess(returnObject, msg);
+                if(activity == null){
+                    return;
+                }
                 activity.runOnUiThread(()->{
                     Utils.toastMsg(context, msg);
                 });

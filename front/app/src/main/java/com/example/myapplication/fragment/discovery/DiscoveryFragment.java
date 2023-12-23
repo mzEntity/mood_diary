@@ -79,6 +79,9 @@ public class DiscoveryFragment extends Fragment {
             @Override
             public void getSuccess(JSONObject returnObject, String msg) {
                 HTTPCallBack.super.getSuccess(returnObject, msg);
+                if(getActivity() == null){
+                    return;
+                }
                 getActivity().runOnUiThread(()->{
                     Utils.toastMsg(requireContext(), "rate " + score);
                     Intent intent = new Intent("RATE_SCORE");
@@ -91,6 +94,9 @@ public class DiscoveryFragment extends Fragment {
             @Override
             public void getNotSuccess(JSONObject returnObject, String msg) {
                 HTTPCallBack.super.getNotSuccess(returnObject, msg);
+                if(getActivity() == null){
+                    return;
+                }
                 getActivity().runOnUiThread(()->{
                     Utils.toastMsg(requireContext(), msg);
                 });

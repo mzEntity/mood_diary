@@ -60,6 +60,9 @@ public class SpaceFragment extends Fragment {
             @Override
             public void getSuccess(JSONObject returnObject, String msg) {
                 HTTPCallBack.super.getSuccess(returnObject, msg);
+                if(getActivity() == null){
+                    return;
+                }
                 getActivity().runOnUiThread(()->{
                     try {
                         JSONObject responseObject = returnObject.getJSONObject("object");
@@ -92,6 +95,9 @@ public class SpaceFragment extends Fragment {
             @Override
             public void getNotSuccess(JSONObject responseObject, String msg) {
                 HTTPCallBack.super.getNotSuccess(responseObject, msg);
+                if(getActivity() == null){
+                    return;
+                }
                 getActivity().runOnUiThread(()->{
                     Utils.toastMsg(requireContext(), msg);
                 });

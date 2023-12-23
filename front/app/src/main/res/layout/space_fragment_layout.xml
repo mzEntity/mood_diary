@@ -3,12 +3,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="4dp">
     <RelativeLayout
         android:id="@+id/space_top_navi"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
         <ImageButton android:id="@+id/space_add_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
